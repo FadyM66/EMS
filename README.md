@@ -6,7 +6,7 @@
 2. Front : React
 3. Database : Postgres
 4. Database Cloud Hosting : AWS
-5. 5. Authentication : JWT
+5. Authentication : JWT
 
 ##  Clone the repo.
 
