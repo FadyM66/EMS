@@ -1,5 +1,7 @@
 # EMS - Employee Management System
 
+Note: This project is still a work in progress. Some features may not be fully implemented or may be subject to change.
+
 ## Technologies Used
 
 1. Backend : Django
