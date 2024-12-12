@@ -1,0 +1,122 @@
+.login-card {
+    max-width: 24rem;
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border-style: solid;
+    border-color: rgba(0, 0, 0, 0.01);
+    border-radius: 0.5rem;
+    padding: 3rem 2.5rem;
+    box-shadow: rgba(0, 0, 0, 0.08) 0px 5px 15px 0px, rgba(25, 28, 33, 0.2) 0px 15px 35px -5px, rgba(0, 0, 0, 0.07) 0px 0px 0px 1px;    
+    margin-top: 7rem;
+}
+
+.login-text,
+.upper-intro {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.login-text > h1 {
+    letter-spacing: normal;
+    font-weight: 700;
+    font-size: 17px;
+    line-height: 1.41176;
+}
+
+.login-text > p {
+    font-size: 0.8125rem;
+    font-weight: 400;
+    line-height: 1.38462;
+    color: rgb(116, 118, 134);
+}
+
+.row {
+    margin-bottom: 1rem;
+}
+
+.form-container label,
+.company-name > h2,
+.prompt h3,
+.cardform label  {
+    font-weight: 500;
+    font-size: 0.8125rem;
+    line-height: 1.38462;
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.4rem;
+}
+
+input, #company_id, #department_id, #status {
+    padding: 0.375rem 0.75rem;
+    background-color: white;
+    outline: transparent solid 2px;
+    outline-offset: 2px;
+    max-height: 2.25rem;
+    width: 100%;
+    aspect-ratio: unset;
+    accent-color: rgb(104, 66, 255);
+    font-family: inherit;
+    letter-spacing: normal;
+    font-weight: 400;
+    font-size: 0.8125rem;
+    line-height: 1.38462;
+    border-radius: 0.375rem;
+    border-style: solid;
+    border-color: rgba(0, 0, 0, 0.11);
+    transition-property: background-color, background, border-color, color, fill, stroke, opacity, box-shadow, transform;
+    transition-timing-function: ease;
+    transition-duration: 200ms;
+    border-width: 0px;
+    box-shadow: rgba(0, 0, 0, 0.11) 0px 0px 0px 1px, rgba(0, 0, 0, 0.07) 0px 0px 1px 0px;
+}
+
+input:focus {
+    box-shadow: rgba(0, 0, 0, 0.28) 0px 0px 0px 1px, rgba(0, 0, 0, 0.11) 0px 0px 1px 0px, rgba(0, 0, 0, 0.11) 0px 0px 0px 4px;
+}
+
+input.error {
+    box-shadow: rgba(255, 0, 0, 0.28) 0px 0px 0px 1px, 
+    rgba(255, 0, 0, 0.11) 0px 0px 1px 0px, 
+    rgba(255, 0, 0, 0.11) 0px 0px 0px 4px;
+}
+
+.form-container form > button {
+    width: 100%;
+    background-color: hsla(252, 100%, 63%, 1);
+    padding: 0.375rem 0.75rem;
+    outline: 0px;
+    cursor: pointer;
+    border-radius: 0.375rem;
+    color: white;
+    font-weight: 500;
+    font-size: 0.8125rem;
+    line-height: 1.38462;
+    border-width: 0px;
+    box-shadow: rgb(104, 66, 255) 0px 0px 0px 1px, rgba(255, 255, 255, 0.07) 0px 1px 1px 0px inset, rgba(34, 42, 53, 0.2) 0px 2px 3px 0px, rgba(0, 0, 0, 0.24) 0px 1px 1px 0px;
+    transition: 0.1s;
+    margin-top: 1rem;
+}
+
+.form-container form > button span {
+    font-weight: 500;
+    font-size: 0.8125rem;
+    line-height: 1.38462;
+}
+
+.form-container form > button:hover {
+    background-color: rgba(104, 66, 255, 0.758);
+}
+
+.form-container form > button:active {
+    background-color: rgba(83, 41, 255, 0.758);
+} 
+
+p.error {
+    text-align: center;
+    font-weight: 500;
+    font-size: 0.8125rem;
+    line-height: 1.38462;
+    color: red;
+}

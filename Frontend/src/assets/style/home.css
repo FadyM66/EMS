@@ -1,0 +1,10 @@
+.summary-data {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-bottom: 4rem;
+}
+
+.summary-data > h1 {
+    padding-left: 4rem;
+}
