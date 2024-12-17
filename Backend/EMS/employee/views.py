@@ -1,13 +1,15 @@
-from rest_framework.response import Response
-from django.db.utils import IntegrityError
-from rest_framework.decorators import api_view
-from .models import Employee
-from user.models import User
-from department.models import Department
-from .serializer import employee_serializer
-from .utils import *
-from user.utils import validate_JWT
 import logging
+
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+
+from django.db.utils import IntegrityError
+
+from .models import Employee
+from department.models import Department
+from .serializer import EmployeeSerializer
+from .utils import *
+from core.utils import validator, validate_params
 
 
 logger = logging.getLogger(__name__)
@@ -22,20 +24,16 @@ def get_employee(request, id):
             logger.error("Error: No token found")    
             return Response({"detail": "No token provided"}, status=401)
         
-        token_validation = validate_JWT(incoming_token)
-        if not token_validation['valid']:
-            return Response({"message": token_validation["error"]}, status=401)
-                    
-        token = token_validation['token']
-        if token['role'] == 'employee':
-            return Response({"detail": "No authority"}, status=403)
+        emp = Employee.objects.filter(id=id)
         
-        employee = Employee.objects.filter(id=id).first()
+        if not emp:
+            return Response({"detail": f"Not found"}, status=404)
         
-        if not employee:
-            return Response({"detail": "Employee not found."}, status=404)
+        permission = has_permission(incoming_token, id)
+        if not permission['valid']:
+            return Response({"detail": f"{permission['error']}"}, status=permission['status'])
         
-        data = employee_serializer(employee).data
+        data = EmployeeSerializer(permission['data']).data
         
         return Response({"data": data} , status=200)
     
@@ -52,21 +50,19 @@ def get_all(request):
         if not incoming_token:
             logger.error("Error: No token found")    
             return Response({"detail": "No token provided"}, status=401)
-        
-        token_validation = validate_JWT(incoming_token)
-        if not token_validation['valid']:
-            return Response({"message": token_validation["error"]}, status=401)
-                    
-        token = token_validation['token']
-        if token['role'] == 'employee':
-            return Response({"detail": "No authority"}, status=403)
-        
+
+        permission = has_permission(incoming_token, 'all')
+        if not permission['valid']:
+            logger.error("Error: Not valid")
+            return Response({"detail": f"{permission['error']}"}, status=permission['status'])
+                
         params = dict(request.query_params)
-        validated_params = validate_fields(params)
+        validated_params = validate_params(params, 'employee')
 
-        employees = Employee.objects.filter(**validated_params)
+        objs = permission['data']
+        employees = objs.filter(**validated_params)
 
-        data = employee_serializer(employees, many=True).data
+        data = EmployeeSerializer(employees, many=True).data
 
         for employee_data, employee in zip(data, employees):
             employee_data['company'] = employee.company.name
@@ -77,8 +73,8 @@ def get_all(request):
         
         logger.error(f"Error: {str(e)}")    
         return Response({"detail": "Internal server error"}, status=500)
-    
 
+    
 @api_view(['POST'])
 def add_employee(request):
     
@@ -87,37 +83,34 @@ def add_employee(request):
         if not incoming_token:
             logger.error("Error: No token found")    
             return Response({"detail": "No token provided"}, status=401)
-        
-        token_validation = validate_JWT(incoming_token)
-        if not token_validation['valid']:
-            return Response({"message": token_validation["error"]}, status=401)
-                    
-        token = token_validation['token']
-        if token['role'] == 'employee':
-            return Response({"detail": "No authority"}, status=403)
-        
+
         data = request.data.get('data')
+
+        is_valid = validator(data, 'employee')
         
-        if not validate_request(data):
-            return Response({"detail": "All of these field are required: department_id, name, email, mobile_number, address, designation status"}, status=400)
+        if not is_valid['valid']:
+            return Response({"detail": is_valid['error']},status=400)
         
-        validated_data = validate_fields(data)
+        permission = has_permission(incoming_token, operation='c' ,new_data=data)
         
-        department_id = validated_data.pop('department__id', None)
+        if not permission['valid']:
+            return Response({"detail": f"{permission['error']}"}, status=permission['status'])
+        
+        department_id = data.pop('department_id', None)
         
         department = Department.objects.filter(id=department_id).first()
         
         if not department:
             return Response({"detail": "Department not found."}, status=404)
 
-        validated_data['department'] = department
+        data['department'] = department
         
         new_employee = Employee(
-                                **validated_data
+                                **data
                             )
         new_employee.save()
 
-        added_employee = employee_serializer(new_employee).data
+        added_employee = EmployeeSerializer(new_employee).data
 
         return Response({"detail": "Employee added succcessfully", "data": added_employee}, status=200)
 
@@ -132,8 +125,7 @@ def add_employee(request):
     except Exception as e:
         logger.error(f"Error: {str(e)}")    
         return Response({"detail": "Internal server error"}, status=500)
-    
-    
+
     
 @api_view(['DELETE'])
 def delete_employee(request, id):
@@ -143,15 +135,10 @@ def delete_employee(request, id):
             logger.error("Error: No token found")    
             return Response({"detail": "No token provided"}, status=401)
         
-        token_validation = validate_JWT(incoming_token)
+        token_validation = has_permission(incoming_token, id, 'd')
         if not token_validation['valid']:
-            return Response({"message": token_validation["error"]}, status=401)
-                    
-        token = token_validation['token']
-        if token['role'] == 'employee':
-            return Response({"detail": "No authority"}, status=403)
-        
-        employee = Employee.objects.get(id=id)
+            return Response({"message": token_validation["error"]}, status=token_validation['status'])
+        employee = token_validation['data']
         
         employee.delete()
         
@@ -174,44 +161,38 @@ def edit_employee(request, id):
             logger.error("Error: No token found")    
             return Response({"detail": "No token provided"}, status=401)
         
-        token_validation = validate_JWT(incoming_token)
-        if not token_validation['valid']:
-            return Response({"message": token_validation["error"]}, status=401)
-        
-        token = token_validation['token']
-         
         data = request.data.get('data')
+
+        is_valid = validator(data, 'employee')
         
-        try:
-            employee = Employee.objects.get(id=id)
-        except Employee.DoesNotExist:
-            return Response({"detail": "Employee not found"}, status=404)
+        if not is_valid['valid']:
+            return Response({"detail": is_valid['error']},status=400)
+                    
+        token_validation = has_permission(incoming_token, id, 'u', data)
         
-        if token['role'] == "employee":
-            user = User.objects.filter(email=token['email']).first()
-            if not user or user.email != employee.email:
-                return Response({"detail": "No authority"}, status=403)
-           
-        validated_data = validate_fields(data)        
-        
-        department_id = validated_data.pop('department__id', None)
+        if not token_validation['valid']:
+            return Response({"message": token_validation["error"]}, status=token_validation['status'])
+
+        employee = token_validation['data']
+
+        department_id = data.pop('department_id', None)
 
         if department_id:
             department = Department.objects.filter(id=department_id).first()
             if not department:
                 return Response({"detail": "Department not found."}, status=404)
-            validated_data['department'] = department
+            data['department'] = department
         
-        for key, value in validated_data.items():
+        for key, value in data.items():
             setattr(employee, key, value)
         
         employee.save()
         
-        updated_employee = employee_serializer(employee).data
+        updated_employee = EmployeeSerializer(employee).data
         
         updated_employee['company'] = employee.company.name
 
-        return Response({"detail": f"Company updated succcessfully", "data": updated_employee}, status=200)
+        return Response({"detail": f"Employee updated succcessfully", "data": updated_employee}, status=200)
 
     except Department.DoesNotExist as e:
         logger.error(f"Error: {str(e)}")

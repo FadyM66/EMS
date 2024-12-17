@@ -1,12 +1,13 @@
 from django.db import models
+
 from department.models import Department
 from employee.models import Employee
 
-# Create your models here.
+
 class Company(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
-    
+
     @property
     def number_of_departments(self):
         return Department.objects.filter(company=self).count()

@@ -1,5 +1,7 @@
 from django.db import models
-from django.utils import timezone
+from django.db import IntegrityError
+from employee.models import Employee
+
 
 # Create your models here.
 class User(models.Model):
@@ -18,6 +20,9 @@ class User(models.Model):
     def save(self, *args, **kwargs):
         if self.role not in dict(self.role_choices):
             raise ValueError(f"Invalid role value. Must be one of {list(dict(self.role_choices).keys())}")
+        
+        if self.role != 'admin' and not Employee.objects.filter(email=self.email).exists():
+            raise IntegrityError(f"{self.email} is not registered as employee")
         super().save(*args, **kwargs)
     
     def __str__(self):
