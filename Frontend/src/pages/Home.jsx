@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import Logo from './Logo';
-import TopBar from './TopBar.jsx';
-import Username from './Username.jsx';
+import Logo from '../components/Logo.jsx';
+import TopBar from '../components/TopBar.jsx';
+import Username from '../components/Username.jsx';
 import '../assets/style/login.css';
 import '../assets/style/companies.css'
 import '../assets/style/home.css'
-import { getData } from '../assets/utils/utils.js';
-import fetcher from '../assets/utils/fetcher.js';
+import { getData } from '../utils/utils.js';
+import fetcher from '../utils/fetcher.js';
 
 const Home = () => {
 
@@ -16,7 +16,6 @@ const Home = () => {
         ()=>{
             const x = async () => {
                 const { response, data } = await fetcher("http://localhost:8000/summary", "GET");
-                console.log(data)
                 setData(data)
             };
         

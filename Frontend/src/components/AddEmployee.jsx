@@ -1,8 +1,10 @@
 import '../assets/style/addcompany.css'
 import { useFormik } from 'formik';
 import { addemployee } from '../assets/schema/schema.js';
-import fetcher from '../assets/utils/fetcher.js';
+import fetcher from '../utils/fetcher.js';
 import { useEffect, useState } from 'react';
+import InputRow from './InputRow.jsx';
+
 
 const AddEmployee = ({ isAdd, setAdd, refreshData }) => {
 
@@ -42,7 +44,7 @@ const AddEmployee = ({ isAdd, setAdd, refreshData }) => {
         },
         validationSchema: addemployee,
         onSubmit: async (values, { setSubmitting, resetForm }) => {
-                console.log("values: ", values)
+            console.log("values: ", values)
 
             setSubmitting(true);
             try {
@@ -92,106 +94,110 @@ const AddEmployee = ({ isAdd, setAdd, refreshData }) => {
 
                     <div className="cardform">
                         <form onSubmit={handleSubmit}>
-
                             <div >
-
-                                <label>name</label>
-                                <input type="text"
-                                    id='name'
-                                    value={values.name}
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                    placeholder={`Enter the name`}
-                                    className={errors.name && touched.name ? "error" : null}
+                                <InputRow
+                                    values={values}
+                                    handleChange={handleChange}
+                                    handleBlur={handleBlur}
+                                    errors={errors}
+                                    touched={touched}
+                                    htmlFor="name"
+                                    label="Name"
+                                    inputId="name"
+                                    name="name"
+                                    type="text"
+                                    placeholder="Enter the name"
                                 />
-                                {errors.name && touched.name && (<p className="error">{errors.name}</p>)}
-
-
-                                <label>email</label>
-                                <input type="text"
-                                    id='email'
-                                    value={values.email}
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                    placeholder={`Enter the email`}
-                                    className={errors.email && touched.email ? "error" : null}
+                                <InputRow
+                                    values={values}
+                                    handleChange={handleChange}
+                                    handleBlur={handleBlur}
+                                    errors={errors}
+                                    touched={touched}
+                                    htmlFor="email"
+                                    label="Email"
+                                    inputId="email"
+                                    name="email"
+                                    type="email"
+                                    placeholder="Enter the email"
                                 />
-                                {errors.email && touched.email && (<p className="error">{errors.email}</p>)}
-
-
-                                <label>Mobile number</label>
-                                <input type="text"
-                                    id='mobile_number'
-                                    name='mobile_number'
-                                    value={values.mobile_number}
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                    placeholder={`Enter the Mobile number`}
-                                    className={errors.mobile_number && touched.mobile_number ? "error" : null}
+                                <InputRow
+                                    values={values}
+                                    handleChange={handleChange}
+                                    handleBlur={handleBlur}
+                                    errors={errors}
+                                    touched={touched}
+                                    htmlFor="mobile_number"
+                                    label="Mobile number"
+                                    inputId="mobile_number"
+                                    name="mobile_number"
+                                    type="text"
+                                    placeholder="Enter the Mobile number"
                                 />
-                                {errors.mobile_number && touched.mobile_number && (<p className="error">{errors.mobile_number}</p>)}
-
-
-                                <label>Address</label>
-                                <input type="text"
-                                    id='address'
-                                    value={values.address}
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                    placeholder={`Enter the address`}
-                                    className={errors.address && touched.address ? "error" : null}
+                                <InputRow
+                                    values={values}
+                                    handleChange={handleChange}
+                                    handleBlur={handleBlur}
+                                    errors={errors}
+                                    touched={touched}
+                                    htmlFor="address"
+                                    label="Address"
+                                    inputId="address"
+                                    name="address"
+                                    type="text"
+                                    placeholder="Enter the address"
                                 />
-                                {errors.address && touched.address && (<p className="error">{errors.address}</p>)}
-
-
-                                <label>Designation</label>
-                                <input type="text"
-                                    id='designation'
-                                    value={values.designation}
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                    placeholder={`Enter the designation`}
-                                    className={errors.designation && touched.designation ? "error" : null}
+                                <InputRow
+                                    values={values}
+                                    handleChange={handleChange}
+                                    handleBlur={handleBlur}
+                                    errors={errors}
+                                    touched={touched}
+                                    htmlFor="designation"
+                                    label="Designation"
+                                    inputId="designation"
+                                    name="designation"
+                                    type="text"
+                                    placeholder="Enter the designation"
                                 />
-                                {errors.designation && touched.designation && (<p className="error">{errors.designation}</p>)}
+                                <div className='row'>
+                                    <label>Status</label>
+                                    <select id="status" value={values.status} onChange={handleChange} name="status"
+                                        className={errors.status && touched.status ? "error" : null}
+                                    >
+                                        <option className='op' value="">Select a status</option>
+                                        <option className='op' value="application_received">application_received</option>
+                                        <option className='op' value="interview_scheduled">interview_scheduled</option>
+                                        <option className='op' value="hired">hired</option>
+                                        <option className='op' value="not_accepted">not_accepted</option>
+                                    </select>
+                                    {errors.status && touched.status && (<p className="error">{errors.status}</p>)}
+                                </div>
 
+                                <div className='row'>
+                                    <label>departments</label>
+                                    <select id="department_id" value={values.department_id} onChange={handleChange} name="department_id"
+                                        className={errors.department_id && touched.department_id ? "error" : null}
+                                    >
+                                        <option className='op' >Select a department</option>
+                                        {
+                                            departments.map((department) =>
+                                            (
+                                                <option className='op' key={department.id} value={department.id}>{department.name}</option>
+                                            ))
+                                        }
+                                    </select>
+                                    {errors.department_id && touched.department_id && (<p className="error">{errors.department_id}</p>)}
+                                </div>
 
-                                <label>Status</label>
-                                <select id="status" value={values.status} onChange={handleChange} name="status"
-                                    className={errors.status && touched.status ? "error" : null}
-                                >
-                                    <option className='op' value="">Select a status</option>
-                                    <option className='op' value="application_received">application_received</option>
-                                    <option className='op' value="interview_scheduled">interview_scheduled</option>
-                                    <option className='op' value="hired">hired</option>
-                                    <option className='op' value="not_accepted">not_accepted</option>
-                                </select>
-                            </div>
-                            {errors.status && touched.status && (<p className="error">{errors.status}</p>)}
-
-
-                            <label>departments</label>
-                            <select id="department_id" value={values.department_id} onChange={handleChange} name="department_id"
-                            className={errors.department_id && touched.department_id ? "error" : null}
-                            >
-                                <option className='op' >Select a department</option>
-                                {
-                                    departments.map((department) =>
-                                    (
-                                        <option className='op' key={department.id} value={department.id}>{department.name}</option>
-                                    ))
-                                }
-                            </select>
-                            {errors.department_id && touched.department_id && (<p className="error">{errors.department_id}</p>)}
-
-
-                            <div className='compant-options'>
-                                <button type='submit' className='option-btn'>add</button>
-                                <button className='option-btn'
-                                    onClick={() => {
-                                        canceladd(resetForm)
-                                        setFieldError('name', null)
-                                    }}>cancel</button>
+                                <div className='compant-options'>
+                                    <button type='submit' className='option-btn'>add</button>
+                                    <button className='option-btn'
+                                        onClick={() => {
+                                            canceladd(resetForm)
+                                            setFieldError('name', null)
+                                        }}>cancel</button>
+                                </div>
                             </div>
                         </form>
                     </div>

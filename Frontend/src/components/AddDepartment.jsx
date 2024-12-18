@@ -1,7 +1,7 @@
 import '../assets/style/addcompany.css'
 import { useFormik } from 'formik';
 import { addcompany } from '../assets/schema/schema.js';
-import fetcher from '../assets/utils/fetcher.js';
+import fetcher from '../utils/fetcher.js';
 import { useEffect, useState } from 'react';
 
 const AddDepartment = ({ isAdd, setAdd, refreshData }) => {

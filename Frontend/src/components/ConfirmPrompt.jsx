@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import '../assets/style/confirmprompt.css';
-import fetcher from '../assets/utils/fetcher';
+import fetcher from '../utils/fetcher';
 
 const ConfirmPrompt = ({ isOpen, setIsOpen, which, id, refreshData }) => {
 

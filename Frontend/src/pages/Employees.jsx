@@ -1,25 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { useFormik } from 'formik';
-import Logo from './Logo';
-import Username from './Username.jsx';
+import Logo from '../components/Logo.jsx';
+import Username from '../components/Username.jsx';
 import '../assets/style/login.css';
-import { loginSchema } from '../assets/schema/schema.js';
-import Cookies from 'js-cookie';
-import TopBar from './TopBar.jsx';
+import TopBar from '../components/TopBar.jsx';
 import '../assets/style/companies.css'
-import ConfirmPrompt from './ConfirmPrompt.jsx'
-import { getData } from '../assets/utils/utils.js';
-import AddCompany from './AddCompany.jsx';
+import ConfirmPrompt from '../components/ConfirmPrompt.jsx'
+import { getData } from '../utils/utils.js';
+import AddEmployee from '../components/AddEmployee.jsx'
 
-const Companies = () => {
+
+const Employees = () => {
     const [isOpen, setIsOpen] = useState(false)
-    const [companies, setData] = useState({})
+    const [employees, setData] = useState({})
     const [dataState, setDataState] = useState(null)
     const [selectedId, setSelectedId] = useState(null)
     const [isAdd, setAdd] = useState(false)
 
     useEffect(() => {
-        getData("http://localhost:8000/company/", { setData, setDataState })
+        getData("http://localhost:8000/employee/", { setData, setDataState })
     },
         []);
 
@@ -30,34 +28,37 @@ const Companies = () => {
 
     return (
         <>
-            <AddCompany
+            <AddEmployee
                 isAdd={isAdd}
                 setAdd={setAdd}
-                refreshData={() => getData('http://localhost:8000/company/', { setData, setDataState })}
+                refreshData={() => getData('http://localhost:8000/employee/', { setData, setDataState })}
             />
             <Logo />
             <TopBar />
             <Username />
             <div className='data-container'>
                 <div className="upper-intro">
-                    <h1>Companies</h1>
-                    <p>You can manage comapanies here</p>
+                    <h1>Employees</h1>
+                    <p>You can manage employees here</p>
                 </div>
                 <div className='lower-container'>
-                    <a className='addbtn' onClick={() => setAdd(true)}> ADD </a>
-                    {companies && companies.length > 0 ?
+                    <div className='btn-container add-container'>
+                        <button className='add-btn' onClick={() => setAdd(true)}> ADD </button>
+                    </div>
+                    {employees && employees.length > 0 ?
                         (
 
-                            companies.map((company) =>
+                            employees.map((employee) =>
                             (
                                 <div className='company-container'>
                                     <div className='company-name'>
-                                        <h2>{company.name}</h2>
+                                        <h2>{employee.name}</h2>
                                     </div>
                                     <div className='btn-container'>
+                                        <button>create account</button>
                                         <button>view</button>
                                         <button>edit</button>
-                                        <button id='delete-btn' onClick={() => handleDelete(company.id)}>delete</button>
+                                        <button id='delete-btn' onClick={() => handleDelete(employee.id)}>delete</button>
                                     </div>
                                 </div>
                             ))
@@ -72,12 +73,12 @@ const Companies = () => {
             <ConfirmPrompt
                 isOpen={isOpen}
                 setIsOpen={setIsOpen}
-                which="company"
+                which="employee"
                 id={selectedId}
-                refreshData={() => getData('http://localhost:8000/company/', { setData, setDataState })}
+                refreshData={() => getData('http://localhost:8000/employee/', { setData, setDataState })}
             />
         </>
     );
 }
 
-export default Companies;
+export default Employees;

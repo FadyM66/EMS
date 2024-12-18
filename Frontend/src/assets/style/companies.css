@@ -104,3 +104,19 @@
 .addbtn:hover {
     color: blueviolet
 }
+
+.add-container {
+    width: 100%;
+    justify-content: start;
+}
+
+.add-btn {
+    width: fit-content !important;
+    box-shadow: rgba(0, 215, 50, 0.2) 0px 0px 0px 1px, rgba(0, 215, 50, 0.2) 0px 2px 3px -1px, rgba(0, 215, 50, 0.2) 0px 1px 0px 0px !important;
+    transition: 0.3s !important;
+}
+
+.add-btn:hover {
+    background: transparent !important;
+    box-shadow: rgba(0, 215, 50, 0.7) 0px 0px 0px 1px, rgba(0, 215, 50, 0.7) 0px 2px 3px -1px, rgba(0, 215, 50, 0.7) 0px 1px 0px 0px !important;
+}

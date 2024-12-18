@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import Logo from './Logo';
-import Username from './Username.jsx';
+import Logo from '../components/Logo.jsx';
+import Username from '../components/Username.jsx';
 import '../assets/style/login.css';
-import TopBar from './TopBar.jsx';
+import TopBar from '../components/TopBar.jsx';
 import '../assets/style/companies.css'
-import ConfirmPrompt from './ConfirmPrompt.jsx'
-import { getData } from '../assets/utils/utils.js';
-import AddDepartment from './AddDepartment.jsx';
+import ConfirmPrompt from '../components/ConfirmPrompt.jsx'
+import { getData } from '../utils/utils.js';
+import AddDepartment from '../components/AddDepartment.jsx';
 
 const Departments = () => {
     const [isOpen, setIsOpen] = useState(false)
@@ -41,7 +41,9 @@ const Departments = () => {
                     <p>You can manage departments here</p>
                 </div>
                 <div className='lower-container'>
-                    <a className='addbtn' onClick={() => setAdd(true)}> ADD </a>
+                    <div className='btn-container add-container'>
+                        <button className='add-btn' onClick={() => setAdd(true)}> ADD </button>
+                    </div>
                     {departments && departments.length > 0 ?
                         (
 
