@@ -1,0 +1,23 @@
+footer {
+    background-color: white;
+    position: fixed;
+    left: 0%;
+    bottom: 0%;
+    width: 100%;
+    height: 2.5 rem;
+    display: flex;
+    justify-content: start;
+    gap: 2rem;
+    padding: 0.7rem 1rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.09);
+}
+
+.name, 
+.role {
+    font-size: small;
+}
+
+footer > div > span {
+    font-size: small;   
+    font-weight: 600;
+}

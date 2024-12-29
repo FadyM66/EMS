@@ -19,7 +19,8 @@
     height: 100%;
 }
 
-.compant-options {
+.company-options,
+.department-options {
     padding: 2rem 0rem;
     display: flex;
     gap: 1rem;
@@ -28,4 +29,10 @@
 .option-btn:active {
     transition: none;
     background-color: rgba(0, 0, 0, 0.541);
+}
+
+.select-company {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
 }

@@ -1,0 +1,17 @@
+
+.data {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    text-align: start !important;
+}
+
+.datarow {
+    font-size: medium;
+}
+
+.datarow > span {
+    padding-left: 1rem;
+    font-size: medium;
+    font-weight: 500;
+}

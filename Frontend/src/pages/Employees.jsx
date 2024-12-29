@@ -1,41 +1,38 @@
-import React, { useEffect, useState } from 'react';
-import Logo from '../components/Logo.jsx';
-import Username from '../components/Username.jsx';
+import React, { useEffect, useContext } from 'react';
+
+import DeletePrompt from '../components/DeletePrompt.jsx';
+import View from '../components/View.jsx';
+import Edit from '../components/Edit.jsx';
+import AddEmployee from '../components/AddEmployee.jsx';
+
 import '../assets/style/login.css';
-import TopBar from '../components/TopBar.jsx';
-import '../assets/style/companies.css'
-import ConfirmPrompt from '../components/ConfirmPrompt.jsx'
+import '../assets/style/companies.css';
+
 import { getData } from '../utils/utils.js';
-import AddEmployee from '../components/AddEmployee.jsx'
+import { PromptContext, PromptProvider } from '../context/PromptContext.jsx';
+import { GeneralContext } from '../context/GeneralContext.jsx';
+import { handleDelete, handleEdit, handleView, handleAccount } from '../utils/handlers.js';
 
 
-const Employees = () => {
-    const [isOpen, setIsOpen] = useState(false)
-    const [employees, setData] = useState({})
-    const [dataState, setDataState] = useState(null)
-    const [selectedId, setSelectedId] = useState(null)
-    const [isAdd, setAdd] = useState(false)
+const Employeess = () => {
+    
+    const { navigate } = useContext(GeneralContext);
+
+    const { isOpen, setIsOpen,
+        data, setData,
+        dataState, setDataState,
+        selectedId, setSelectedId,
+        viewData, setViewData,
+        editData, setEditData
+    } = useContext(PromptContext);
 
     useEffect(() => {
         getData("http://localhost:8000/employee/", { setData, setDataState })
     },
         []);
 
-    const handleDelete = (id) => {
-        setSelectedId(id)
-        setIsOpen(true)
-    }
-
     return (
         <>
-            <AddEmployee
-                isAdd={isAdd}
-                setAdd={setAdd}
-                refreshData={() => getData('http://localhost:8000/employee/', { setData, setDataState })}
-            />
-            <Logo />
-            <TopBar />
-            <Username />
             <div className='data-container'>
                 <div className="upper-intro">
                     <h1>Employees</h1>
@@ -43,22 +40,27 @@ const Employees = () => {
                 </div>
                 <div className='lower-container'>
                     <div className='btn-container add-container'>
-                        <button className='add-btn' onClick={() => setAdd(true)}> ADD </button>
+                        <button className='add-btn' onClick={() => setIsOpen('add')}> ADD </button>
                     </div>
-                    {employees && employees.length > 0 ?
+                    {data && data.length > 0 ?
                         (
 
-                            employees.map((employee) =>
+                            data.map((employee, index) =>
                             (
-                                <div className='company-container'>
+                                <div className='company-container' key={index}>
                                     <div className='company-name'>
                                         <h2>{employee.name}</h2>
                                     </div>
                                     <div className='btn-container'>
-                                        <button>create account</button>
-                                        <button>view</button>
-                                        <button>edit</button>
-                                        <button id='delete-btn' onClick={() => handleDelete(employee.id)}>delete</button>
+                                        <button onClick={
+                                            async () => {
+                                                const data = await handleAccount(employee.email)
+                                                navigate('/user', { state: { data } })
+                                            }
+                                        }>account</button>
+                                        <button onClick={() => handleView(setIsOpen, setSelectedId, employee.id)}>view</button>
+                                        <button onClick={() => handleEdit(setIsOpen, setEditData, employee)}>edit</button>
+                                        <button id='delete-btn' onClick={() => handleDelete(setSelectedId, setIsOpen, employee.id)}>delete</button>
                                     </div>
                                 </div>
                             ))
@@ -70,15 +72,44 @@ const Employees = () => {
                     }
                 </div>
             </div>
-            <ConfirmPrompt
+            <AddEmployee
+                isOpen={isOpen}
+                setIsOpen={setIsOpen}
+                refreshData={() => getData('http://localhost:8000/employee/', { setData, setDataState })}
+            />
+            <DeletePrompt
                 isOpen={isOpen}
                 setIsOpen={setIsOpen}
                 which="employee"
                 id={selectedId}
                 refreshData={() => getData('http://localhost:8000/employee/', { setData, setDataState })}
             />
+            <View
+                isOpen={isOpen}
+                which="employee"
+                setIsOpen={setIsOpen}
+                viewData={viewData}
+                setViewData={setViewData}
+                id={selectedId}
+            />
+            <Edit
+                isOpen={isOpen}
+                which="employee"
+                setIsOpen={setIsOpen}
+                editData={editData}
+                setEditData={setEditData}
+                refreshData={() => getData('http://localhost:8000/employee/', { setData, setDataState })}
+            />
         </>
     );
+}
+
+const Employees = () => {
+    return (
+        <PromptProvider>
+            <Employeess />
+        </PromptProvider>
+    )
 }
 
 export default Employees;

@@ -1,21 +1,8 @@
-* {
-    padding: 0px;
-    margin: 0px;
-    box-sizing: border-box;
-    font-family: "system-ui","Inter,sans-serif";
-    font-size: 16px;
+.row {
+    margin-bottom: 0.8rem;
 }
 
-input,
-input::placeholder {
-    text-align: center;
-}
-
-input:focus::placeholder {
-    color: transparent;
-}
-
-select {
+.row-input {
     padding: 0.375rem 0.75rem;
     background-color: white;
     outline: transparent solid 2px;
@@ -37,14 +24,13 @@ select {
     transition-duration: 200ms;
     border-width: 0px;
     box-shadow: rgba(0, 0, 0, 0.11) 0px 0px 0px 1px, rgba(0, 0, 0, 0.07) 0px 0px 1px 0px;
-
 }
 
-label {
+p.error {
+    text-align: center;
     font-weight: 500;
     font-size: 0.8125rem;
     line-height: 1.38462;
-    display: flex;
-    align-items: center;
-    margin-bottom: 0.4rem;
+    color: red;
+    margin-top: 0.5rem;
 }

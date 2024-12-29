@@ -1,7 +1,10 @@
-import '../assets/style/addcompany.css'
+import '../assets/style/addprompt.css'
 import { useFormik } from 'formik';
-import { addcompany } from '../assets/schema/schema.js';
+import { company } from '../utils/schema.js';
 import fetcher from '../utils/fetcher.js';
+import { handleCancel } from '../utils/handlers.js';
+import InputRow from './InputRow.jsx';
+
 
 const AddCompany = ({ isAdd, setAdd, refreshData }) => {
     const {
@@ -18,12 +21,11 @@ const AddCompany = ({ isAdd, setAdd, refreshData }) => {
         initialValues: {
             name: "",
         },
-        validationSchema: addcompany,
+        validationSchema: company,
         onSubmit: async (values, { setSubmitting, resetForm }) => {
-
             setSubmitting(true);
             try {
-                const { response, data } = await fetcher(
+                const { response } = await fetcher(
                     'http://localhost:8000/company/add',
                     "POST",
                     values,
@@ -46,14 +48,9 @@ const AddCompany = ({ isAdd, setAdd, refreshData }) => {
         },
     });
 
-    if (!isAdd) {
+    if (isAdd != 'add') {
         return null
     }
-
-    const canceladd = (resetForm) => {
-        setAdd(false);
-        resetForm(); 
-    };
 
     return (
         <>
@@ -65,26 +62,24 @@ const AddCompany = ({ isAdd, setAdd, refreshData }) => {
                     </div>
                     <div className="cardform">
                         <form onSubmit={handleSubmit}>
-                            <div >
-                                <label>name</label>
-                                <input type="text"
-                                id='name'
-                                value={values.name}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                 placeholder={`Enter the name`}
-                                className={errors.name && touched.name ? "error" : null} 
-                                />
-                            </div>
-                            {errors.name && touched.name && (
-                                <p className="error">{errors.name}</p>
-                            )}
-                            <div className='compant-options'>
+                            <InputRow
+                                values={values}
+                                handleChange={handleChange}
+                                handleBlur={handleBlur}
+                                errors={errors}
+                                touched={touched}
+                                htmlFor="name"
+                                label="Name"
+                                name="name"
+                                type="text"
+                                placeholder="Enter the company name"
+                            />
+                            <div className='company-options'>
                                 <button type='submit' className='option-btn'>add</button>
-                                <button className='option-btn' 
-                                onClick={() => {
-                                    canceladd(resetForm)
-                                    setFieldError('name', null)
+                                <button className='option-btn'
+                                    onClick={() => {
+                                        handleCancel(setAdd, resetForm)
+                                        setFieldError('name', null)
                                     }}>cancel</button>
                             </div>
                         </form>

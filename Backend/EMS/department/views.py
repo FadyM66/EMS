@@ -52,7 +52,13 @@ def get_department(request, id):
             return Response({"detail": "Department not found."}, status=404)
         
         data = DepartmentSerializer(department).data
+        data['number of employees'] = department.number_of_employees
         
+        company_id = data.pop('company', None)
+        company_name = Company.objects.filter(id=company_id).first().name
+        
+        data['company'] = company_name
+
         return Response({"data": data} , status=200)
     
     except Exception as e:
@@ -212,9 +218,7 @@ def edit_department(request, id):
             return Response({"detail": "No authority"}, status=403)
         
         department = Department.objects.filter(id=id).first()
-                    
         data = request.data.get('data')
-        
         is_valid = validator(data, 'department')
         
         if not is_valid['valid']:
@@ -229,17 +233,16 @@ def edit_department(request, id):
             
         for field, value in data.items():
             if field == 'company_id':
-                setattr(Department, field, company)
+                setattr(department, field, company)
                 continue
-            setattr(Department, field, value)
+            setattr(department, field, value)
         
         department.save()
         
         updated_department = DepartmentSerializer(department).data
         
         updated_department['number_of_employees'] = department.number_of_employees
-
-        return Response({"detail": f"Company updated succcessfully", "data": updated_department}, status=200)
+        return Response({"detail": f"Department updated succcessfully", "data": updated_department}, status=200)
 
     except Department.DoesNotExist as e:
         logger.error(f"Error: {str(e)}")

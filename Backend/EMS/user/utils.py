@@ -21,7 +21,7 @@ def JWT_generator(**kwargs):
         return token
 
 def has_permission(token: str, new_user_email: str, new_user_role: str):
-    
+
     token_validor = validate_JWT(token)
     
     if not token_validor['valid']:

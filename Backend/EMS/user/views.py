@@ -135,19 +135,19 @@ def get_user(request):
         
         token = validate_JWT(incoming_token)        
         
-        data = dict(request.data.get('data'))
+        data = dict(request.query_params)
         user_data = validate_params(data, 'user')
 
         if 'email' not in user_data:
             return Response({"detail": "Email is required"}, status=400)
 
         user = User.objects.get(email=user_data['email'])
-        
-        if user_data['email'] != token['email']:
+
+        if user_data['email'] != token['token']['email']:
             is_permitted = has_permission(incoming_token, user_data['email'], user.role)
             if not is_permitted['valid']:
                 return Response({"detail": f"{is_permitted['error']}"}, status=is_permitted['status'])
-        
+
         employee = Employee.objects.filter(email=user_data["email"]).first()
         
         data = user_serializer(user).data
@@ -162,7 +162,7 @@ def get_user(request):
 
     except User.DoesNotExist as e:
         logger.error(f"Error: {str(e)}")    
-        return Response({"details": "User doesn't exist"},status=400)         
+        return Response({"details": "User doesn't exist"},status=404)         
 
     except Exception as e:
         logger.error(f"Error: {str(e)}")    

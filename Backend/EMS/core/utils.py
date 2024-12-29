@@ -40,13 +40,13 @@ def validator(data: dict, which_to_validate: Literal['company', 'department', 'e
             "name": r'^[A-Za-z\s]{3,}$'
         },
         "department": {
-            "name": r'^[A-Za-z\s]{3,}$',
+            "name": r'^[A-Za-z\s]{2,}$',
             "company_id": r'^\d+$'
         },
         "employee": {
-            "department_id": r'^\d$',
+            "department_id": r'^\d+$',
             "name": r'^[A-Za-z][A-Za-z\s]{3,}$',
-            "email": r'^[A-Za-z][\w\.-]+@[\w\.-]+\.\w{2,}$',
+            "email": r'^[a-zA-Z][a-zA-Z0-9_]*@[a-zA-Z]+\.[a-zA-Z]{2,}$',
             "mobile_number": r'^01[0-2,5]{1}[0-9]{8}$',
             "address": r'^[A-Za-z\s]{3,}$',
             "designation": r'^[A-Za-z\s]{2,}$',

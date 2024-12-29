@@ -39,7 +39,9 @@ def get_company(request, id):
         if not company:
             return Response({"detail": "Company not found."}, status=404)
         
-        data = CompanySerializer(company)
+        data = CompanySerializer(company).data
+        data['number_of_departments'] = company.number_of_departments
+        data['number_of_employees'] = company.number_of_employees
         
         return Response({"data": data} , status=200)
     

@@ -178,5 +178,3 @@ CORS_ALLOW_HEADERS = [
     'token',
     'accept',
 ]
-
-

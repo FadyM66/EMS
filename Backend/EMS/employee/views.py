@@ -184,7 +184,8 @@ def edit_employee(request, id):
             data['department'] = department
         
         for key, value in data.items():
-            setattr(employee, key, value)
+            if value:
+                setattr(employee, key, value)
         
         employee.save()
         

@@ -12,63 +12,25 @@
     margin-top: 7rem;
 }
 
-.login-text,
-.upper-intro {
-    text-align: center;
-    margin-bottom: 1rem;
-}
-
-.login-text > h1 {
+.prompt-h1 {
     letter-spacing: normal;
     font-weight: 700;
     font-size: 17px;
     line-height: 1.41176;
 }
 
-.login-text > p {
+.prompt-p {
     font-size: 0.8125rem;
     font-weight: 400;
     line-height: 1.38462;
     color: rgb(116, 118, 134);
 }
 
-.form-container label,
-.company-name > h2,
-.prompt h3,
-.cardform label  {
-    font-weight: 500;
-    font-size: 0.8125rem;
-    line-height: 1.38462;
-    display: flex;
-    align-items: center;
-    margin-bottom: 0.4rem;
-}
+/* , #company_id, #department_id, #status */
 
-input, #company_id, #department_id, #status {
-    padding: 0.375rem 0.75rem;
-    background-color: white;
-    outline: transparent solid 2px;
-    outline-offset: 2px;
-    max-height: 2.25rem;
-    width: 100%;
-    aspect-ratio: unset;
-    accent-color: rgb(104, 66, 255);
-    font-family: inherit;
-    letter-spacing: normal;
-    font-weight: 400;
-    font-size: 0.8125rem;
-    line-height: 1.38462;
-    border-radius: 0.375rem;
-    border-style: solid;
-    border-color: rgba(0, 0, 0, 0.11);
-    transition-property: background-color, background, border-color, color, fill, stroke, opacity, box-shadow, transform;
-    transition-timing-function: ease;
-    transition-duration: 200ms;
-    border-width: 0px;
-    box-shadow: rgba(0, 0, 0, 0.11) 0px 0px 0px 1px, rgba(0, 0, 0, 0.07) 0px 0px 1px 0px;
-}
 
-input:focus {
+
+.row-input:focus {
     box-shadow: rgba(0, 0, 0, 0.28) 0px 0px 0px 1px, rgba(0, 0, 0, 0.11) 0px 0px 1px 0px, rgba(0, 0, 0, 0.11) 0px 0px 0px 4px;
 }
 
@@ -78,7 +40,7 @@ input.error {
     rgba(255, 0, 0, 0.11) 0px 0px 0px 4px;
 }
 
-.form-container form > button {
+#signin-btn {
     width: 100%;
     background-color: hsla(252, 100%, 63%, 1);
     padding: 0.375rem 0.75rem;
@@ -95,29 +57,19 @@ input.error {
     margin-top: 1rem;
 }
 
-.form-container form > button span {
+#signin-btn span {
     font-weight: 500;
     font-size: 0.8125rem;
     line-height: 1.38462;
 }
 
-.form-container form > button:hover {
+#signin-btn:hover {
     background-color: rgba(104, 66, 255, 0.758);
 }
 
-.form-container form > button:active {
+#signin-btn:active {
     background-color: rgba(83, 41, 255, 0.758);
 } 
 
-p.error {
-    text-align: center;
-    font-weight: 500;
-    font-size: 0.8125rem;
-    line-height: 1.38462;
-    color: red;
-    margin-top: 0.5rem;
-}
 
-.row {
-    margin-bottom: 0.8rem;
-}
+

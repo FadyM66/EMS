@@ -1,8 +1,9 @@
-import '../assets/style/addcompany.css'
+import '../assets/style/addprompt.css'
 import { useFormik } from 'formik';
-import { addcompany } from '../assets/schema/schema.js';
+import { department } from '../utils/schema.js';
 import fetcher from '../utils/fetcher.js';
 import { useEffect, useState } from 'react';
+import InputRow from './InputRow.jsx';
 
 const AddDepartment = ({ isAdd, setAdd, refreshData }) => {
 
@@ -35,20 +36,17 @@ const AddDepartment = ({ isAdd, setAdd, refreshData }) => {
             name: "",
             company_id: ""
         },
-        validationSchema: addcompany,
+        validationSchema: department,
         onSubmit: async (values, { setSubmitting, resetForm }) => {
 
             setSubmitting(true);
             try {
-                console.log("values: ", values)
                 const { response, data } = await fetcher(
                     'http://localhost:8000/department/add',
                     "POST",
                     values,
                     false
                 )
-                console.log("res: ", response)
-                console.log("data: ", data)
                 if (response.status == 200) {
                     setAdd(false)
                     refreshData()
@@ -66,7 +64,7 @@ const AddDepartment = ({ isAdd, setAdd, refreshData }) => {
         },
     });
 
-    if (!isAdd) {
+    if (isAdd != 'add') {
         return null
     }
 
@@ -85,34 +83,31 @@ const AddDepartment = ({ isAdd, setAdd, refreshData }) => {
                     </div>
                     <div className="cardform">
                         <form onSubmit={handleSubmit}>
-                            <div >
-                                <label>name</label>
-                                <input type="text"
-                                    style={{ marginBottom: "1rem" }}
-                                    id='name'
-                                    value={values.name}
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                    placeholder={`Enter the name`}
-                                    className={errors.name && touched.name ? "error" : null}
-                                />
+                            <InputRow
+                                values={values}
+                                handleChange={handleChange}
+                                handleBlur={handleBlur}
+                                errors={errors}
+                                touched={touched}
+                                htmlFor="name"
+                                label="Name"
+                                name="name"
+                                type="text"
+                                placeholder="Enter the department name"
+                            />
+                            <div className='select-company'>
+                                <label>companies</label>
+                                <select value={values.company_id} onChange={handleChange} name="company_id">
+                                    <option className='op' >Select a company</option>
+                                    {
+                                        companies.map((company) => (
+
+                                            <option className='op' key={company.id} value={company.id}>{company.name}</option>
+
+                                        ))}
+                                </select>
                             </div>
-                            {errors.name && touched.name && (
-                                <p className="error">{errors.name}</p>
-                            )}
-
-                            <label>companies</label>
-                            <select id="company_id" value={values.company_id} onChange={handleChange} name="company_id">
-                                <option className='op' >Select a company</option>
-                                {
-                                    companies.map((company) => (
-
-                                        <option className='op' key={company.id} value={company.id}>{company.name}</option>
-
-                                    ))}
-                            </select>
-
-                            <div className='compant-options'>
+                            <div className='department-options'>
                                 <button type='submit' className='option-btn'>add</button>
                                 <button className='option-btn'
                                     onClick={() => {

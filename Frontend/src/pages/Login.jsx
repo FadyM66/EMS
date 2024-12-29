@@ -1,67 +1,34 @@
-import React, { useEffect } from 'react';
+import { useEffect, useContext } from 'react';
 import { useFormik } from 'formik';
-import Logo from '../components/Logo.jsx';
-import '../assets/style/login.css';
-import { loginSchema } from '../assets/schema/schema.js';
-import fetcher from '../utils/fetcher.js';
+import { loginSchema } from '../utils/schema.js';
+
 import Cookies from 'js-cookie';
+
 import InputRow from '../components/InputRow.jsx';
+import Logo from '../components/Logo.jsx';
+import { GeneralContext } from '../context/GeneralContext.jsx';
+import { handleLoginSubmit } from '../utils/LoginUtils.js';
+
+import '../assets/style/login.css';
+
 
 const Login = () => {
 
+    const { navigate } = useContext(GeneralContext);
+
     useEffect(() => {
         if (Cookies.get('token')) {
-            window.location.href = '/home'
+            navigate('/home')
         }
     }, []);
 
-    const {
-        values,
-        errors,
-        touched,
-        isSubmitting,
-        handleChange,
-        handleBlur,
-        handleSubmit,
-        setFieldError,
-    } = useFormik({
+    const { values, errors, touched, isSubmitting, handleChange, handleBlur, handleSubmit } = useFormik({
         initialValues: {
             email: "",
             password: "",
         },
         validationSchema: loginSchema,
-        onSubmit: async (values, { setSubmitting }) => {
-
-            setSubmitting(true);
-            try {
-                const { response, data } = await fetcher(
-                    'http://localhost:8000/user/login',
-                    "POST",
-                    values,
-                    true
-                )
-                if (response.status == 200) {
-                    Cookies.set("token", data.data.token)
-                    Cookies.set("role", data.data.data.role)
-                    Cookies.set("name", data.data.data.username)
-                    window.location.href = '/home'
-                }
-                else if (response.status == 401) {
-                    setFieldError('password', "invalid password")
-                }
-                else if (response.status == 404) {
-                    setFieldError('email', "user not found")
-                }
-                else {
-                    setFieldError('password', "try again later")
-                }
-                setSubmitting(false);
-            }
-            catch (error) {
-                setFieldError('password', 'try again later')
-            }
-
-        },
+        onSubmit: (values, formikHelpers) => handleLoginSubmit(values, formikHelpers, navigate),
     });
 
     return (
@@ -69,8 +36,8 @@ const Login = () => {
             <Logo />
             <div className="login-card">
                 <div className="login-text">
-                    <h1>Sign in to EMS</h1>
-                    <p>Welcome back! Please sign in to continue</p>
+                    <h1 className='prompt-h1'>Sign in to EMS</h1>
+                    <p className='prompt-p'>Welcome back! Please sign in to continue</p>
                 </div>
                 <div className="form-container">
                     <form onSubmit={handleSubmit}>
@@ -100,7 +67,7 @@ const Login = () => {
                             type="password"
                             placeholder="Enter your password"
                         />
-                        <button type="submit" disabled={isSubmitting}>
+                        <button id='signin-btn' type="submit" disabled={isSubmitting}>
                             <span>{isSubmitting ? 'Signing in...' : 'Sign in'}</span>
                         </button>
                     </form>

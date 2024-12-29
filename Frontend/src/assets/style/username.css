@@ -8,9 +8,10 @@
 
 #signout {
     cursor: pointer;
+    font-size: medium;
     font-weight: 300;
 }
 
 #signout:hover {
-    font-weight: 400;
+    text-decoration: underline;
 }

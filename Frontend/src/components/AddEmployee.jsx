@@ -1,12 +1,12 @@
-import '../assets/style/addcompany.css'
+import { handleCancel } from '../utils/handlers.js';
 import { useFormik } from 'formik';
-import { addemployee } from '../assets/schema/schema.js';
+import { employee } from '../utils/schema.js';
 import fetcher from '../utils/fetcher.js';
 import { useEffect, useState } from 'react';
 import InputRow from './InputRow.jsx';
 
 
-const AddEmployee = ({ isAdd, setAdd, refreshData }) => {
+const AddEmployee = ({ isOpen, setIsOpen, refreshData }) => {
 
     const [departments, setDepartments] = useState([])
 
@@ -42,7 +42,7 @@ const AddEmployee = ({ isAdd, setAdd, refreshData }) => {
             status: "",
             department_id: ""
         },
-        validationSchema: addemployee,
+        validationSchema: employee,
         onSubmit: async (values, { setSubmitting, resetForm }) => {
             console.log("values: ", values)
 
@@ -57,7 +57,7 @@ const AddEmployee = ({ isAdd, setAdd, refreshData }) => {
                 console.log("res: ", response)
                 console.log("data: ", data)
                 if (response.status == 200) {
-                    setAdd(false)
+                    setIsOpen(null)
                     refreshData()
                     resetForm()
                 }
@@ -73,7 +73,7 @@ const AddEmployee = ({ isAdd, setAdd, refreshData }) => {
         },
     });
 
-    if (!isAdd) {
+    if (isOpen != 'add') {
         return null
     }
 
@@ -190,11 +190,11 @@ const AddEmployee = ({ isAdd, setAdd, refreshData }) => {
                                     {errors.department_id && touched.department_id && (<p className="error">{errors.department_id}</p>)}
                                 </div>
 
-                                <div className='compant-options'>
+                                <div className='company-options'>
                                     <button type='submit' className='option-btn'>add</button>
                                     <button className='option-btn'
                                         onClick={() => {
-                                            canceladd(resetForm)
+                                            handleCancel(setIsOpen, resetForm)
                                             setFieldError('name', null)
                                         }}>cancel</button>
                                 </div>

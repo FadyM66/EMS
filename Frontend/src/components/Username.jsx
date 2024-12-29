@@ -5,9 +5,10 @@ const Username = () => {
     return (
         <>
             <div id="topright">
-                <h4>{Cookies.get('name')}</h4>
                 <p id="signout" onClick={() => {
                     Cookies.remove('token');
+                    Cookies.remove('name');
+                    Cookies.remove('role');
                     window.location.href = "/"
                     }}>Sign out</p>
             </div>

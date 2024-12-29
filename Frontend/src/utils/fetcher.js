@@ -24,18 +24,17 @@ const fetcher = async (url, Method, values = {}, login = false) => {
 
         let data = null;
 
-        try{
+        try {
             data = await response.json();
-        }
-        catch (error) {
-            console.log("No Json sent")
+        } catch (error) {
+            console.log("No Json sent");
         }
 
         return { response, data };
 
     } catch (error) {
-        
-        console.log("error: ", error)
+
+        console.log("Error: ", error);
         return { response: null, data: null };
     }
 }
